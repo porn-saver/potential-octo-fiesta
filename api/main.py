@@ -8,9 +8,6 @@ from api.middleware.cacheInterceptor import intercept_all_requests
 from api.middleware.cors import setup_cors
 from api.middleware.timeCount import add_process_time_header
 
-from Proxy_List_Scrapper import Scrapper
-
-scrapper = Scrapper(category='SSL', print_err_trace=False)
 app = FastAPI(title='Porn-saver', version='1.0.0')
 client = PornHub([])
 
