@@ -80,9 +80,11 @@ class Stars(object):
         element = scrap["profile"][0]
         elementClass = scrap["profile"][1]
         aux = soup_data.findAll(element, class_=elementClass)
-        body = {"body": soup_data.prettify()}
-        video = soup_data.findAll()
-        return aux if len(aux) != 0 else {"msg":body}
+        body = soup_data.prettify()
+        body = ''.join(char for char in body if char !='\n')
+        body = body.replace('\&quot;','')
+        body = body.replace('\"', '')
+        return aux if len(aux) != 0 else {"msg": body}
 
     def _scrapLiStars(self, soup_data):
         # get div with list of stars (month popular is the 1st)
