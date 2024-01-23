@@ -1,3 +1,6 @@
+import logging
+import os
+
 from fastapi import FastAPI
 
 import uvicorn
@@ -19,6 +22,15 @@ app.middleware("http")(add_process_time_header)
 setup_cors(app)
 
 app.include_router(StarController.router)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("app.log"),
+    ]
+)
 
 if __name__ == "__main__":
     uvicorn.run("api.main:app", host="0.0.0.0", port=int(8080), log_level="info")
