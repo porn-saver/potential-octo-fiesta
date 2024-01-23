@@ -7,6 +7,7 @@
 
     :copyright: (c) 2016 by Sven Skender
 """
+import logging
 
 from .core import *
 from .stars import Stars
@@ -21,6 +22,7 @@ class PornHub(Stars, Videos, Photos):
         Stars.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
         Videos.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
         Photos.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
+        logging.info("Init app")
 
     def setProxyDictionary(self, ProxyIP, ProxyPort):
         if ProxyIP == None or ProxyPort == None:
