@@ -1,4 +1,5 @@
 import logging
+import os
 
 from fastapi import FastAPI
 
@@ -22,12 +23,17 @@ setup_cors(app)
 
 app.include_router(StarController.router)
 
+# Obtener el directorio temporal del sistema
+temp_dir = '/tmp' if os.path.exists('/tmp') else '/var/task'
+
+# Configura el registro para escribir en la consola y en un archivo en el directorio temporal
+log_file_path = os.path.join(temp_dir, "app.log")
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler("app.log"),
+        logging.FileHandler(log_file_path),
     ]
 )
 logging.info("Deploy")
