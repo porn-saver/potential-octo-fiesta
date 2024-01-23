@@ -22,5 +22,6 @@ app.middleware("http")(add_process_time_header)
 setup_cors(app)
 
 app.include_router(StarController.router)
+
 if __name__ == "__main__":
     uvicorn.run("api.main:app", host="0.0.0.0", port=int(8080), log_level="info")
