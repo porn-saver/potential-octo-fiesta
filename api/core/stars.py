@@ -1,3 +1,5 @@
+import json
+
 from .core import *
 from api.controllers.star.models.StarModel import StarModel
 from ..controllers.star.config.ScrapStar import scrap
@@ -78,8 +80,9 @@ class Stars(object):
         element = scrap["profile"][0]
         elementClass = scrap["profile"][1]
         aux = soup_data.findAll(element, class_=elementClass)
+        body = {"body": soup_data.prettify()}
         video = soup_data.findAll()
-        return aux if len(aux) != 0 else {"msg": "Data no found"}
+        return aux if len(aux) != 0 else {"msg":body}
 
     def _scrapLiStars(self, soup_data):
         # get div with list of stars (month popular is the 1st)
@@ -323,7 +326,7 @@ class Stars(object):
         while True:
             for possible_star in self._scrapLiStars(self._loadStarsPage(page, sort_by)):
                 if "msg" in possible_star:
-                    return {"msg": "Data no found"}
+                    yield {"msg": "Data no found"}
                 data_dict = self._scrapStarInfo(possible_star)
                 if data_dict:
                     yield data_dict
@@ -340,9 +343,7 @@ class Stars(object):
         if "msg" in possible_star:
             possible_star = self._scrapLiStar(self._loadModelPage(name))
             if "msg" in possible_star:
-                response = ErrorResponse()
-                response.code = 404
-                response.message = 'Data no found'
+                response = ErrorResponse(404, possible_star['msg'])
                 yield response
             else:
                 data_dict = self._scrapOneStarInfo(possible_star[0])
