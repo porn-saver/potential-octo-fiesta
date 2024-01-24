@@ -1,11 +1,8 @@
-import logging
-import sys
-
 from fastapi import FastAPI
-
 import uvicorn
 
 from api.controllers.star import StarController
+from api.controllers.video import VideoController
 from api.core import PornHub
 from api.middleware.cacheInterceptor import intercept_all_requests
 from api.middleware.cors import setup_cors
@@ -22,14 +19,7 @@ app.middleware("http")(add_process_time_header)
 setup_cors(app)
 
 app.include_router(StarController.router)
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-    ]
-)
+app.include_router(VideoController.router)
 
 if __name__ == "__main__":
     uvicorn.run("api.main:app", host="0.0.0.0", port=int(8080), log_level="info")

@@ -1,18 +1,8 @@
-# -*- coding: UTF-8 -*-
-
-"""
-    pornhub
-    ----------
-    PornHub Unofficial API for Python (2.7) + (Also works with Python 3.5)
-
-    :copyright: (c) 2016 by Sven Skender
-"""
-import logging
-
 from .core import *
 from .stars import Stars
 from .videos import Videos
 from .photos import Photos
+from .downloadCore import initSocket
 
 
 class PornHub(Stars, Videos, Photos):
@@ -22,7 +12,7 @@ class PornHub(Stars, Videos, Photos):
         Stars.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
         Videos.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
         Photos.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
-        logging.info("Init app")
+        initSocket()
 
     def setProxyDictionary(self, ProxyIP, ProxyPort):
         if ProxyIP == None or ProxyPort == None:

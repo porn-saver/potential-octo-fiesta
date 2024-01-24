@@ -4,6 +4,10 @@ from .core import *
 import re
 import json
 
+from ..controllers.video.models.SortEnum import SORTENUM
+from ..controllers.video.models.VideoModel import VideoModel
+
+
 class Videos(object):
 
     def __init__(self, ProxyDictionary, keywords=[], *args):
@@ -16,24 +20,20 @@ class Videos(object):
         if not sort_by:
             return sort_dict
 
-        if self.keywords:
-            sort_types = {"recent": "mr", "view": "mv", "rate": "tr", "long": "lg"}
-        else:
-            sort_types = {"view": "mv", "rate": "tr", "hot":"ht", "long": "lg", "new": "cm"}
-
-        for key in sort_types:
-            if key in sort_by.lower():
-                sort_dict["o"] = sort_types[key]
+        for key in SORTENUM:
+            if key.value == sort_by.lower() and key.value != "recent":
+                sort_dict["o"] = key.name
                 return sort_dict
 
         return sort_dict
 
-    def _craftVideosURL(self, page_num, sort_by):
-        # url example:
-        # pornhub.com/video/search?search=arg1+arg2
-        # pornhub.com/video/search?search=arg1+arg2&p=professional
-        # pornhub.com/video/search?search=arg1+arg2&p=professional&page=3
-        payload = dict()
+    def _craftVideosURL(self, page_num, sort_by, payload=dict()):
+        aux = payload.copy()
+        for k in payload:
+            if payload[k] == '':
+                aux.pop(k)
+        video_sort = self._sortVideos(sort_by)
+        payload = aux
 
         if self.keywords:
             payload["search"] = ""
@@ -46,9 +46,8 @@ class Videos(object):
                 else:
                     payload["search"] += (item + " ")
 
-            payload["search"] = payload["search"].strip() # removing the last space, otherwise it will always be 1 page
+            payload["search"] = payload["search"].strip()  # removing the last space, otherwise it will always be 1 page
 
-        video_sort = self._sortVideos(sort_by)
         for key in video_sort:
             payload[key] = video_sort[key]
 
@@ -56,13 +55,14 @@ class Videos(object):
         return payload
 
     def _loadPage(self, page_num=None, sort_by=None, url=None, viewkey=None):
+        payload = dict()
         # load search page
         if page_num:
             search_url = BASE_URL + VIDEOS_URL
             if self.keywords:
                 search_url += SEARCH_URL
-            r = requests.get(search_url, params=self._craftVideosURL(page_num, sort_by), headers=HEADERS, proxies=self.ProxyDictionary)
-
+            r = requests.get(search_url, params=self._craftVideosURL(page_num, sort_by, payload), headers=HEADERS,
+                             proxies=self.ProxyDictionary)
         # load video page
         else:
             if url and isVideo(url):
@@ -75,24 +75,19 @@ class Videos(object):
         return BeautifulSoup(html, "lxml")
 
     def _scrapLiVideos(self, soup_data):
-        return soup_data.find("div", class_="sectionWrapper").find_all("li", { "class" : re.compile(".*videoblock videoBox.*") } )
+        return soup_data.find("div", class_="sectionWrapper").find_all("li",
+                                                                       {"class": re.compile(".*videoblock videoBox.*")})
 
     def _scrapVideosInfo(self, div_el):
-        data = {
-            "title"         : None,     # string
-            "url"           : None,     # string
-            "rating"        : None,     # integer
-            "duration"      : None,     # string
-            "img_url"       : None      # string
-        }
+        data = VideoModel()
 
         # scrap url, name
         for a_tag in div_el.find_all("a", href=True):
             try:
                 url = a_tag.attrs["href"]
                 if isVideo(url):
-                    data["url"] = BASE_URL + url
-                    data["title"] = a_tag.attrs["title"]
+                    data.url = BASE_URL + url
+                    data.title = a_tag.attrs["title"]
                     break
             except Exception as e:
                 pass
@@ -102,68 +97,85 @@ class Videos(object):
             try:
                 url = img_tag.attrs["data-mediumthumb"]
                 if isVideoPhoto(url):
-                    data["img_url"] = url
+                    data.imageUrl = url
                     break
             except Exception as e:
                 pass
 
         # scrap duration
-        for var_tag in div_el.find_all("var", { "class" : "duration" } ):
+        for var_tag in div_el.find_all("var", {"class": "duration"}):
             try:
-                data["duration"] = str(var_tag).split(">")[-2].split("<")[-2]
+                data.duration = str(var_tag).split(">")[-2].split("<")[-2]
                 break
             except Exception as e:
                 pass
 
         # scrap rating
-        for div_tag in div_el.find_all("div", { "class" : "value" } ):
+        for div_tag in div_el.find_all("div", {"class": "value"}):
             try:
-                data["rating"] = int( str(div_tag).split(">")[1].split("%")[0] )
+                data.rating = int(str(div_tag).split(">")[1].split("%")[0])
                 break
             except Exception as e:
                 pass
 
-        # return
-        print(data.values())
-        return data if None not in data.values() else False
+        for span_tag in div_el.find_all("span", {"class": "views"}):
+            try:
+                data.views = span_tag.text.split(" ")[0]
+                break
+            except Exception as e:
+                pass
+
+        for div_tag in div_el.find_all("div", class_="videoUploaderBlock"):
+            try:
+                values = dict()
+                userValue = div_tag.find_all("a")
+                values["user"] = userValue[0].text
+                values["url"] = userValue[0].attrs["href"]
+                values["type"] = userValue[0].attrs["href"].split('/')[1]
+                data.userUploadedData = values
+                break
+            except Exception as e:
+                pass
+
+        return data if not data.checkValues() else False
 
     # Scrap duration, upload_date, author, embed_url, accurate_views
     def _scrapScriptInfo(self, soup_data):
 
         data = dict()
-        script_dict = json.loads(soup_data.replace("'",'"'))
+        script_dict = json.loads(soup_data.replace("'", '"'))
 
         data["author"] = script_dict["author"]
         data["embed_url"] = script_dict["embedUrl"]
-        data["duration"] = ":".join(re.findall(r"\d\d",script_dict["duration"]))
-        data["upload_date"] = re.findall(r"\d{4}-\d{2}-\d{2}",script_dict["uploadDate"])[0]
-        data["accurate_views"] = int(script_dict["interactionStatistic"][0]["userInteractionCount"].replace(",",""))
+        data["duration"] = ":".join(re.findall(r"\d\d", script_dict["duration"]))
+        data["upload_date"] = re.findall(r"\d{4}-\d{2}-\d{2}", script_dict["uploadDate"])[0]
+        data["accurate_views"] = int(script_dict["interactionStatistic"][0]["userInteractionCount"].replace(",", ""))
 
         return data
 
     def _scrapVideoInfo(self, soup_data):
 
         data = {
-            "title"             : None,     # string
-            "views"             : None,     # string
-            "accurate_views"    : None,     # integer
-            "rating"            : None,     # integer
-            "duration"          : None,     # string
-            "loaded"            : None,     # string
-            "upload_date"       : None,     # string
-            "likes"             : None,     # string
-            "accurate_likes"    : None,     # integer
-            "dislikes"          : None,     # string
-            "accurate_dislikes" : None,     # integer
-            "favorite"          : None,     # string
-            "author"            : None,     # string
-            "pornstars"         : None,     # list
-            "categories"        : None,     # list
-            "tags"              : None,     # list
-            "production"        : None,     # string
-            "url"               : None,     # string
-            "img_url"           : None,     # string
-            "embed_url"         : None      # string
+            "title": None,  # string
+            "views": None,  # string
+            "accurate_views": None,  # integer
+            "rating": None,  # integer
+            "duration": None,  # string
+            "loaded": None,  # string
+            "upload_date": None,  # string
+            "likes": None,  # string
+            "accurate_likes": None,  # integer
+            "dislikes": None,  # string
+            "accurate_dislikes": None,  # integer
+            "favorite": None,  # string
+            "author": None,  # string
+            "pornstars": None,  # list
+            "categories": None,  # list
+            "tags": None,  # list
+            "production": None,  # string
+            "url": None,  # string
+            "img_url": None,  # string
+            "embed_url": None  # string
         }
 
         # Scrap duration, upload_date, author, embed_url, accurate_views
@@ -183,14 +195,15 @@ class Videos(object):
         video = soup_data.find("div", class_="video-wrapper")
 
         data["views"] = video.find("span", class_="count").text  # Scrap view
-        data["rating"] = int(video.find("span", class_="percent").text.replace("%",""))  # Scrap rating
+        data["rating"] = int(video.find("span", class_="percent").text.replace("%", ""))  # Scrap rating
         data["loaded"] = video.find("span", class_="white").text  # Scrap loaded
         data["likes"] = video.find("span", class_="votesUp").text  # Scrap like
         data["accurate_likes"] = video.find("span", class_="votesUp")["data-rating"]  # Scrap accurate_like
         data["dislikes"] = video.find("span", class_="votesDown").text  # Scrap dislike
-        data["accurate_dislikes"] = video.find("span", class_="votesDown")["data-rating"] # Scrap accurate_dislike
-        data["favorite"] = video.find("span", class_="favoritesCounter").text.strip() # Scrap favorite
-        data["production"] = video.find("div", class_="productionWrapper").find_all("a", class_="item")[0].text # Scrap production
+        data["accurate_dislikes"] = video.find("span", class_="votesDown")["data-rating"]  # Scrap accurate_dislike
+        data["favorite"] = video.find("span", class_="favoritesCounter").text.strip()  # Scrap favorite
+        data["production"] = video.find("div", class_="productionWrapper").find_all("a", class_="item")[
+            0].text  # Scrap production
 
         # Scrap pornstars
         pornstars = []
@@ -213,28 +226,10 @@ class Videos(object):
         return data
 
     def getVideo(self, url=None, viewkey=None, *args):
-        """
-        Get video informations.
-        You can enter the full video url or just the viewkey
-        :url: video url on phub
-        :viewkey: viewkey of video
-        """
         if url or viewkey:
             return self._scrapVideoInfo(self._loadPage(url=url, viewkey=viewkey))
-        else:
-            print("***URL or Viewkey not entered***")
 
-    def getVideos(self, quantity = 1, page = 1, sort_by = None, full_data=False, infinity = False):
-        """
-        Get videos basic informations.
-
-        :param quantity: number of videos to return
-        :param page: starting page number
-        :param sort_by: sort type
-        :param full_data: take full video data
-        :param infinity: never stop downloading
-        """
-
+    def getVideos(self, quantity=1, page=1, sort_by=None, full_data=False, infinity=False):
         quantity = quantity if quantity >= 1 else 1
         page = page if page >= 1 else 1
         found = 0
@@ -242,7 +237,6 @@ class Videos(object):
         while True:
             for possible_video in self._scrapLiVideos(self._loadPage(page_num=page, sort_by=sort_by)):
                 data_dict = self._scrapVideosInfo(possible_video)
-                print(data_dict)
                 if data_dict:
                     if full_data:
                         yield self.getVideo(data_dict["url"])
@@ -254,3 +248,8 @@ class Videos(object):
                         if found >= quantity: return
 
             page += 1
+
+    def changeVideoKeyWords(self, keyWords=None):
+        if keyWords is None:
+            keyWords = []
+        self.keywords = keyWords
