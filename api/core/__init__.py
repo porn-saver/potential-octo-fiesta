@@ -2,7 +2,6 @@ from .core import *
 from .stars import Stars
 from .videos import Videos
 from .photos import Photos
-from .downloadCore import initSocket
 
 
 class PornHub(Stars, Videos, Photos):
@@ -12,7 +11,6 @@ class PornHub(Stars, Videos, Photos):
         Stars.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
         Videos.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
         Photos.__init__(self, self.ProxyDictionary, keywords=keywords, *args)
-        initSocket()
 
     def setProxyDictionary(self, ProxyIP, ProxyPort):
         if ProxyIP == None or ProxyPort == None:

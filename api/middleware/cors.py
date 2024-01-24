@@ -7,7 +7,5 @@ def setup_cors(app):
         allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["GET"],
-        allow_headers=["*"],
-        expose_headers=["*"],  # Puedes ajustar esto según tus necesidades
-        max_age=1,  # Puedes ajustar esto según tus necesidades
+        allow_headers=["*"]  # Puedes ajustar esto según tus necesidades
     )
