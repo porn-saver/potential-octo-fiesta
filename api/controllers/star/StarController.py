@@ -1,5 +1,3 @@
-import logging
-
 from fastapi import Request
 
 from fastapi import APIRouter, Depends
@@ -18,7 +16,6 @@ router = APIRouter(
 @router.get("/all")
 def get_all_stars(request: Request, quantity: int = 5, page: int = 1, sort_by: SORTENUM = None):
     main.client.changeStarKeyWords({})
-    logging.info("aaaaa putaaaaaaaa")
     return setCacheData(request, main.client.getStars(quantity, page, sort_by))
 
 

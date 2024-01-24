@@ -30,7 +30,6 @@ class PornHub(Stars, Videos, Photos):
         else:
             Address = "://" + ProxyIP + ":" + str(ProxyPort)
             self.ProxyDictionary = {"http": "https" + Address, "https": "https" + Address}
-            print(self.ProxyDictionary)
 
 
 __copyright__ = "Copyright 2016 by Sven Skender"

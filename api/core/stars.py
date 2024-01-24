@@ -80,12 +80,7 @@ class Stars(object):
         element = scrap["profile"][0]
         elementClass = scrap["profile"][1]
         aux = soup_data.findAll(element, class_=elementClass)
-        body = soup_data.prettify()
-        body = ''.join(char for char in body if char !='\n')
-        body = body.replace('\&quot;','')
-        body = body.replace('\"', '')
-
-        return aux if len(aux) != 0 else {"msg": body}
+        return aux if len(aux) != 0 else {"msg": "Data no found"}
 
     def _scrapLiStars(self, soup_data):
         # get div with list of stars (month popular is the 1st)
@@ -170,10 +165,12 @@ class Stars(object):
 
             if span_tag.find_all(scrap["listVerified"][2], class_=scrap["listVerified"][3]):
                 star.verified = True
-
+            else:
+                star.verified = False
             if span_tag.find_all(scrap["listVerified"][2], class_=scrap["listVerified"][4]):
                 star.trophy = True
-
+            else:
+                star.trophy = False
         # scrap type
         try:
             if "pornstar" in star.url:
@@ -268,10 +265,12 @@ class Stars(object):
 
             if span_tag.find_all(scrap["starVerified"][2], class_=scrap["starVerified"][3]):
                 star.verified = True
-
+            else:
+                star.verified = False
             if span_tag.find_all(scrap["starVerified"][4], class_=scrap["starVerified"][5]):
                 star.trophy = True
-
+            else:
+                star.trophy = False
         for div_tag in section.find_all(scrap["starBio"][0], class_=scrap["starBio"][1]):
             try:
                 divs = div_tag.find_all(scrap["starBio"][2])
@@ -329,7 +328,9 @@ class Stars(object):
         while True:
             for possible_star in self._scrapLiStars(self._loadStarsPage(page, sort_by)):
                 if "msg" in possible_star:
-                    yield {"msg": "Data no found"}
+                    response = ErrorResponse(404, 'Data no found')
+                    yield response
+                    return
                 data_dict = self._scrapStarInfo(possible_star)
                 if data_dict:
                     yield data_dict
@@ -348,6 +349,7 @@ class Stars(object):
             if "msg" in possible_star:
                 response = ErrorResponse(404, possible_star['msg'])
                 yield response
+                return
             else:
                 data_dict = self._scrapOneStarInfo(possible_star[0])
                 if data_dict:
