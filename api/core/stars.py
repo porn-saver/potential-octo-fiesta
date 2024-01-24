@@ -84,6 +84,7 @@ class Stars(object):
         body = ''.join(char for char in body if char !='\n')
         body = body.replace('\&quot;','')
         body = body.replace('\"', '')
+
         return aux if len(aux) != 0 else {"msg": body}
 
     def _scrapLiStars(self, soup_data):
