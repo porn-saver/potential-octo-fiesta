@@ -44,10 +44,10 @@ async def websocket_endpoint(websocket: WebSocket):
         await manager.disconnect(websocket)
         return
     except WebSocketDisconnect as e:
-        logger.info(e)
+        logger.error(e)
         await manager.send_personal_message(e, websocket)
         await manager.disconnect(websocket)
 
 
 if __name__ == "__main__":
-    uvicorn.run("api.main:app", host="0.0.0.0", port=int(8080), log_level="info")
+    uvicorn.run("api.main:app", host="0.0.0.0", port=int(8080), debug=True)
