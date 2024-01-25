@@ -13,7 +13,7 @@ from api.middleware.cacheInterceptor import intercept_all_requests
 from api.middleware.cors import setup_cors
 from api.middleware.timeCount import add_process_time_header
 
-logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logging.config.fileConfig('api/logConfig.conf', disable_existing_loggers=False)
 
 # get root logger
 logger = logging.getLogger(__name__)
