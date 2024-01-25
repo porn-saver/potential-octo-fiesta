@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
@@ -11,6 +12,11 @@ from api.core.downloadCore import custom_dl_download
 from api.middleware.cacheInterceptor import intercept_all_requests
 from api.middleware.cors import setup_cors
 from api.middleware.timeCount import add_process_time_header
+
+logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+
+# get root logger
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title='Porn-saver', version='1.0.0')
 client = PornHub([])
@@ -38,6 +44,7 @@ async def websocket_endpoint(websocket: WebSocket):
         await manager.disconnect(websocket)
         return
     except WebSocketDisconnect as e:
+        logger.info(e)
         await manager.send_personal_message(e, websocket)
         await manager.disconnect(websocket)
 

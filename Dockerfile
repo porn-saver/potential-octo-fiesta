@@ -17,4 +17,4 @@ COPY . /app/
 EXPOSE 8080
 
 # Comando para ejecutar la aplicación FastAPI
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080", "--log-config", "api.logConfig.yaml"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
