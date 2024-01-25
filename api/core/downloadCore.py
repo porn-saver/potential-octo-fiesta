@@ -28,15 +28,22 @@ def custom_dl_download(url):
 
     outtmpl = './api/downloads/%(title)s.%(ext)s'
     ydl_opts = {
-        'format': 'best',
+        'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
         'outtmpl': outtmpl,
         'nooverwrites': True,
         'no_warnings': False,
         'ignoreerrors': True,
         'n_threads': 100,
-        'geo_bypass': True
+        'geo_bypass': True,
+        'cookiesfile': 'cookies.txt',
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
-        return info
+        downloadUrls = []
+        for format in info['formats']:
+            url = dict()
+            url["format"] = format['format_id']
+            url["url"] = format['url']
+            downloadUrls.append(url)
+        return downloadUrls

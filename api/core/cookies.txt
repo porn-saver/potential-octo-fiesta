@@ -1,0 +1,8 @@
+# Netscape HTTP Cookie File
+# http://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.pornhub.com	TRUE	/	FALSE	3355496222	bs	7j74bzosuxof58vpnzq2sa0yih5e00r4
+.pornhub.com	TRUE	/	FALSE	1522185176	expiredEnterModalShown	1
+.pornhub.com	TRUE	/	FALSE	3223004990	il	v1ijgTdGXTZHyST9GU2E1g8rRHDPCLtMXeq846YFHV5eYxNTIwMTUyOTQwaC1GSm5pLUhqZENDTG9RWVVKTnVVaHplTmlRbVA2VlVkZnMzZ1ZWMw..
+.pornhub.com	TRUE	/	FALSE	1551604111	ss	257851818681477916
