@@ -36,7 +36,7 @@ manager = ConnectionManager()
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    print('test')
+    logger.info("logging from the root logger")
     await manager.connect(websocket)
     try:
         url = await websocket.receive_text()
