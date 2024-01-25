@@ -35,10 +35,10 @@ async def websocket_endpoint(websocket: WebSocket):
         url = await websocket.receive_text()
         await custom_dl_download(url, manager, websocket)
         await manager.disconnect(websocket)
-        return;
-    except WebSocketDisconnect:
+        return
+    except WebSocketDisconnect as e:
+        await manager.send_personal_message(e, websocket)
         await manager.disconnect(websocket)
-        await manager.send_personal_message("Bye!!!", websocket)
 
 
 if __name__ == "__main__":
