@@ -2,6 +2,8 @@ import yt_dlp
 import requests
 import urllib.parse as urlparse
 
+from api.controllers.video.models.DownloadVideoModel import DownloadVideoModel
+
 
 def ph_url_check(url):
     parsed = urlparse.urlparse(url)
@@ -35,16 +37,22 @@ def custom_dl_download(url):
         'ignoreerrors': True,
         'n_threads': 100,
         'geo_bypass': True,
-        'cookiesfile': 'cookies.txt',
-        'verbose': True
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         downloadUrls = []
         for format in info['formats']:
-            url = dict()
-            url["format"] = format['format_id']
-            url["url"] = format['url']
-            downloadUrls.append(url)
+            if "hls" in format["format_id"]:
+                videoFormat: DownloadVideoModel = DownloadVideoModel()
+                videoFormat.fps = format['fps']
+                videoFormat.height = format["height"]
+                videoFormat.resolution = format["resolution"]
+                videoFormat.width = format["width"]
+                videoFormat.ext = format["ext"]
+                videoFormat.format = format["format"]
+                videoFormat.aspectRatio = format["aspect_ratio"]
+                videoFormat.manifestUrl = format["manifest_url"]
+                videoFormat.url = format["url"]
+                downloadUrls.append(videoFormat)
         return downloadUrls
