@@ -17,12 +17,18 @@ logging.config.fileConfig('api/logConfig.conf', disable_existing_loggers=False)
 # get root logger
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title='Porn-saver', version='1.0.0')
+app = FastAPI(title='Potential Octo Fiesta', version='1.0.0')
 client = PornHub([])
 
 # Middleware
 app.middleware("http")(intercept_all_requests)
 app.middleware("http")(add_process_time_header)
+
+
+@app.get("/health")
+async def read_health():
+    return {"status": "OK"}
+
 
 # CORS
 setup_cors(app)

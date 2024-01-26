@@ -17,7 +17,6 @@ def checkCacheDate(request: Request):
 
 
 def setCacheData(request: Request, data):
-    print(data)
     response = [value.toJson() for value in data]
     response = response[0] if len(response) == 1 else response
     aux = copy(request)
