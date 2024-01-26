@@ -36,6 +36,7 @@ def custom_dl_download(url):
         'n_threads': 100,
         'geo_bypass': True,
         'cookiesfile': 'cookies.txt',
+        'verbose': True
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
