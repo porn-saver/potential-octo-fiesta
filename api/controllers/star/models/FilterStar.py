@@ -2,21 +2,27 @@ from pydantic.fields import Field
 from pydantic.main import BaseModel
 
 from api.controllers.star.models.SortEnum import SORTENUM
+from api.shared.enums.BreastTypeEnum import BreastTypeEnum
+from api.shared.enums.CupEnum import CupSizeEnum
+from api.shared.enums.EthnicityEnum import EthnicityEnum
+from api.shared.enums.GenderEnum import GenderEnum
+from api.shared.enums.HairColorEnum import HairColorEnum
+from api.shared.enums.PerformerTypeEnum import PerformerType
+from api.shared.enums.QuantityEnum import QuantityEnum
+from api.shared.enums.TottoosEnum import BooleanEnum
 
 
 class FilterStar(BaseModel):
-    performerType: str = Field(enum=['', 'amateur', 'pornstar'], default='')
-    gender: str = Field(enum=['', 'male', 'female', 'm2f', 'f2f'], default='')
-    ethnicity: str = Field(enum=['', 'asian', 'indian', 'black', 'middle+eastern', 'latin', 'mixed', 'white', 'other'],
-                           default='')
-    hair: str = Field(enum=['', 'auburn', 'bald', 'black', 'blonde', 'brunette', 'grey', 'red', 'varius', 'other'],
-                      default='')
-    tattoos: str = Field(enum=['', 'yes', 'no'], default='')
-    piercings: str = Field(enum=['', 'yes', 'no'], default='')
-    breasttype: str = Field(enum=['', ' natural', 'fake'], default='')
+    performerType: PerformerType = Field(default=None)
+    gender: GenderEnum = Field(default=None)
+    ethnicity: EthnicityEnum = Field(default=None)
+    hair: HairColorEnum = Field(default=None)
+    tattoos: BooleanEnum = Field(default=None)
+    piercings: BooleanEnum = Field(default=None)
+    breasttype: BreastTypeEnum = Field(default=None)
     minAge: str = Field(default='')
     maxAge: str = Field(default='')
-    cup: str = Field(enum=['', 'a', 'b', 'c', 'd', 'e', 'f-z'], default='')
-    quantity: int = Field(default=5)
+    cup: CupSizeEnum = Field(default=None)
+    quantity: QuantityEnum = Field(default=5)
     page: int = Field(default=1)
-    sort_by: SORTENUM = Field(default='rank')
+    sort_by: SORTENUM = Field(default=None)

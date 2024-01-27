@@ -11,9 +11,7 @@ def ph_url_check(url):
     regions = ["www", "cn", "cz", "de", "es", "fr", "it", "nl", "jp", "pt", "pl", "rt"]
     for region in regions:
         if parsed.netloc == region + ".pornhub.com":
-            print("PornHub url validated.")
             return
-    print("This is not a PornHub url.")
 
 
 def ph_alive_check(url):
@@ -25,9 +23,6 @@ def ph_alive_check(url):
 
 
 def custom_dl_download(url):
-    # ph_url_check(url)
-    ph_alive_check(url)
-
     outtmpl = './api/downloads/%(title)s.%(ext)s'
     ydl_opts = {
         'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
