@@ -32,8 +32,7 @@ def custom_dl_download(url):
         'no_warnings': False,
         'ignoreerrors': True,
         'n_threads': 100,
-        'geo_bypass': True,
-        'cookiefile':'api/shared/cookies.txt'
+        'geo_bypass': True
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
