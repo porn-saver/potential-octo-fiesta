@@ -39,19 +39,14 @@ def custom_dl_download(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         downloadUrls = []
-        print(os.getcwd())
-        [print(arch) for arch in os.scandir(os.getcwd())]
-        for format in info['formats']:
-            if "hls" not in format["format_id"]:
-                videoFormat: DownloadVideoModel = DownloadVideoModel()
-#                 videoFormat.fps = format['fps']
-                videoFormat.height = format["height"]
-                videoFormat.resolution = format["resolution"]
-#                 videoFormat.width = format["width"]
-                videoFormat.ext = format["ext"]
-                videoFormat.format = format["format"]
-                videoFormat.aspectRatio = format["aspect_ratio"]
-#                 videoFormat.manifestUrl = format["manifest_url"]
-                videoFormat.url = format["url"]
-                downloadUrls.append(videoFormat)
+#         for format in info['formats']:
+#             if "hls" not in format["format_id"]:
+#                 videoFormat: DownloadVideoModel = DownloadVideoModel()
+#                 videoFormat.height = format["height"]
+#                 videoFormat.resolution = format["resolution"]
+#                 videoFormat.ext = format["ext"]
+#                 videoFormat.format = format["format"]
+#                 videoFormat.aspectRatio = format["aspect_ratio"]
+#                 videoFormat.url = format["url"]
+#                 downloadUrls.append(videoFormat)
         return downloadUrls
