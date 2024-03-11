@@ -50,7 +50,7 @@ def custom_dl_download(url):
                     videoFormat.aspectRatio = format["aspect_ratio"]
                     videoFormat.url = format["url"]
                     downloadUrls.append(videoFormat)
-            print(downloadUrls)
+                    print(videoFormat.url)
             return downloadUrls
         except Exception as e:
             print(f"Se ha producido una excepción: {e}")
