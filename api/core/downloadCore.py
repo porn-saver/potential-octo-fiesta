@@ -39,6 +39,7 @@ def custom_dl_download(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         downloadUrls = []
+        print(info)
 #         for format in info['formats']:
 #             if "hls" not in format["format_id"]:
 #                 videoFormat: DownloadVideoModel = DownloadVideoModel()
