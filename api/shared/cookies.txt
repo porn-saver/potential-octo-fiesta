@@ -10,13 +10,13 @@
 .pornhub.com	TRUE	/	TRUE	0	cookieConsent	3
 .pornhub.com	TRUE	/	TRUE	0	bs	5bxegd6ml9scxs997tteezz2wacij95a
 .pornhub.com	TRUE	/	FALSE	1712756216	lang	en
-.pornhub.com	TRUE	/	TRUE	1710254094	ua	7f65ff317c237641f7aace3b7dac03d6
+.pornhub.com	TRUE	/	TRUE	1710255955	ua	360e84e713831390e7a54e8216be089b
 .pornhub.com	TRUE	/	TRUE	1744724217	bsdd	5bxegd6ml9scxs997tteezz2wacij95a
 .pornhub.com	TRUE	/	FALSE	1710250617	_gid	GA1.2.729632313.1710164218
 .pornhub.com	TRUE	/	FALSE	1710164277	_gat	1
 .pornhub.com	TRUE	/	FALSE	1744724218	_ga_B39RFFWGYY	GS1.1.1710164208.1.1.1710164218.55.0.0
 .pornhub.com	TRUE	/	FALSE	1744724218	_ga	GA1.1.661500694.1710164209
-.pornhub.com	TRUE	/	TRUE	1710772494	platform	pc
+.pornhub.com	TRUE	/	TRUE	1710774355	platform	pc
 www.pornhub.com	FALSE	/	TRUE	1737822179	__l	65B38C0F-42FE722901BB176275-1AFCB05E
 www.pornhub.com	FALSE	/	TRUE	0	__s	65EF0A70-42FE722901BB154D32-2ECBC809
 pornhub.com	FALSE	/	FALSE	0	age_verified	1
@@ -24,3 +24,4 @@ pornhub.com	FALSE	/	FALSE	0	accessAgeDisclaimerPH	1
 pornhub.com	FALSE	/	FALSE	0	accessAgeDisclaimerUK	1
 pornhub.com	FALSE	/	FALSE	0	accessPH	1
 pornhub.com	FALSE	/	FALSE	0	platform	pc
+.xvideos.com	TRUE	/	TRUE	1744729714	session_token	2f733226bcdbe031wjKpulbdBhaLBDzEw0UQPjE6MLsUE7tLoTWFm0z-GlkpHw2SWQyvnpTKGVB_FTwnBpArRcPIiedGc3nAGMZKioC8YwPdY0e7n6-w-Ig53xX4vHO2jnkdczHd__rdrGLE_d0Gy8KBmwOpAXADqqtsCiQQXD3ItmPHYevFXL3xPFLRkqsQOz3WPCQseGo7souz-8jTzEiXDghoNZJsW2gQ1g%3D%3D

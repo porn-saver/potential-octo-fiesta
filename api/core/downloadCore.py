@@ -41,9 +41,10 @@ def custom_dl_download(url):
             info = ydl.extract_info(url, download=False)
             downloadUrls = []
             for format in info['formats']:
+                print(format)
                 if "hls" not in format["format_id"]:
                     videoFormat: DownloadVideoModel = DownloadVideoModel()
-                    videoFormat.height = format["height"]
+#                     videoFormat.height = format["height"]
                     videoFormat.resolution = format["resolution"]
                     videoFormat.ext = format["ext"]
                     videoFormat.format = format["format"]
