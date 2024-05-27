@@ -9,4 +9,4 @@ soupsieve==2.5
 starlette==0.26.1
 urllib3==2.1.0
 uvicorn==0.27.0
-yt-dlp==2023.12.30
+yt-dlp==2023.12.30.232719.dev0

@@ -37,20 +37,18 @@ def custom_dl_download(url):
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
-            info = ydl.extract_info(url, download=False)
+            info = ydl.extract_info(url, download=False, ie_key='PornHub', force_generic_extractor=True)
             downloadUrls = []
             for format in info['formats']:
-                print(format)
-                if "hls" not in format["format_id"]:
+                if "hls" in format["format_id"]:
                     videoFormat: DownloadVideoModel = DownloadVideoModel()
-#                     videoFormat.height = format["height"]
+                    videoFormat.height = format["height"]
                     videoFormat.resolution = format["resolution"]
                     videoFormat.ext = format["ext"]
                     videoFormat.format = format["format"]
                     videoFormat.aspectRatio = format["aspect_ratio"]
                     videoFormat.url = format["url"]
                     downloadUrls.append(videoFormat)
-                    print(videoFormat.url)
             return downloadUrls
         except Exception as e:
             print(f"Se ha producido una excepción: {e}")
