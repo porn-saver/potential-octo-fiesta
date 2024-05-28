@@ -26,8 +26,8 @@ def setCacheData(request: Request, data):
     return response
 
 
-def setCacheDataEnum(request: Request, enum):
-    response = [{data.name: data.value for data in enum}]
+def setCacheDataEnum(request: Request, enum, isJson: bool = False):
+    response = enum if isJson else [{data.name: data.value for data in enum}]
     response = response[0] if len(response) == 1 else response
     aux = copy(request)
     url: str = str(aux.url).lower().replace(" ", "-")

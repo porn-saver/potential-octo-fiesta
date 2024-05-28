@@ -3,6 +3,7 @@ from fastapi import Request
 from fastapi import APIRouter, Depends
 
 from api.middleware.cache import setCacheDataEnum
+from api.shared.enums.CategoryEnum import CategoryEnum
 from api.shared.enums.CupEnum import CupSizeEnum
 from api.shared.enums.BreastTypeEnum import BreastTypeEnum
 from api.shared.enums.EthnicityEnum import EthnicityEnum
@@ -62,3 +63,8 @@ def get_quantity_enum(request: Request):
 @router.get("/tattoos")
 def get_tattoos_enum(request: Request):
     return setCacheDataEnum(request, BooleanEnum)
+
+
+@router.get("/category")
+def get_tattoos_enum(request: Request):
+    return setCacheDataEnum(request, CategoryEnum, True)
