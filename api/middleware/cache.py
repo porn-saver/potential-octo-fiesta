@@ -26,6 +26,16 @@ def setCacheData(request: Request, data):
     return response
 
 
+def setCacheDataEnum(request: Request, enum):
+    response = [{data.name: data.value for data in enum}]
+    response = response[0] if len(response) == 1 else response
+    aux = copy(request)
+    url: str = str(aux.url).lower().replace(" ", "-")
+    cache_key = f"cached_data:{url}"
+    cache[cache_key] = response
+    return response
+
+
 async def getBody(request: Request):
     body = []
     return body

@@ -4,6 +4,7 @@ import logging
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
 
+from api.controllers.combos import ComboController
 from api.controllers.socket.ConnectionManager import ConnectionManager
 from api.controllers.star import StarController
 from api.controllers.video import VideoController
@@ -35,6 +36,7 @@ setup_cors(app)
 
 app.include_router(StarController.router)
 app.include_router(VideoController.router)
+app.include_router(ComboController.router)
 
 manager = ConnectionManager()
 

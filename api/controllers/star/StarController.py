@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import Request
 
 from fastapi import APIRouter, Depends
@@ -7,10 +5,8 @@ from fastapi import APIRouter, Depends
 from api import main
 from api.controllers.star.models.FilterStar import FilterStar
 from api.controllers.star.models.SortEnum import SORTENUM
-from api.controllers.star.models.StarModel import StarModel
 from api.middleware.cache import setCacheData
 from api.shared.ErrorResponse import ErrorResponse
-from api.shared.enums.EthnicityEnum import EthnicityEnum
 from api.shared.enums.QuantityEnum import QuantityEnum
 
 router = APIRouter(
