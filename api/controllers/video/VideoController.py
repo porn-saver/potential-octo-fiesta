@@ -6,6 +6,7 @@ from api.controllers.video.models.SortEnum import SORTENUM
 from api.core.downloadCore import custom_dl_download
 from api.middleware.cache import setCacheData
 from api.shared.ErrorResponse import ErrorResponse
+from api.shared.enums.CategoryEnum import CategoryEnum
 from api.shared.enums.QuantityEnum import QuantityEnum
 
 router = APIRouter(
@@ -22,6 +23,9 @@ def get_all_videos(request: Request, quantity: QuantityEnum = 5, page: int = 1, 
 
 @router.get("/filter")
 def get_all_videos_filter(request: Request, params: FilterVideo = Depends(FilterVideo)):
+    if params.category not in CategoryEnum and params.category is not None:
+        errorResponse: ErrorResponse = ErrorResponse(400, 'Bas request, category don`t exists')
+        return errorResponse
     main.client.changeVideoKeyWords(params)
     return setCacheData(request, main.client.getVideos(int(params.quantity), params.page, params.sort_by))
 

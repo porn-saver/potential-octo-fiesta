@@ -18,15 +18,15 @@ def checkCacheDate(request: Request):
 
 def setCacheData(request: Request, data):
     response = [value.toJson() for value in data]
-    setCache(response, request)
+    return set_cache(request, response)
 
 
 def setCacheDataEnum(request: Request, enum, isJson: bool = False):
     response = enum if isJson else [{data.name: data.value for data in enum}]
-    setCache(response, request)
+    return set_cache(request, response)
 
 
-def setCache(response, request):
+def set_cache(request, response):
     response = response[0] if len(response) == 1 else response
     aux = copy(request)
     url: str = str(aux.url).lower().replace(" ", "-")

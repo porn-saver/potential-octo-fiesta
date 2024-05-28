@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from pydantic.fields import Field
 
 from api.controllers.video.models.SortEnum import SORTENUM
-from api.shared.enums.CategoryEnum import CategoryEnum
 from api.shared.enums.ProductionEnum import ProductionEnum
 from api.shared.enums.TottoosEnum import BooleanEnum
 
