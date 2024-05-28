@@ -52,13 +52,14 @@ class Videos(object):
                     payload['hd'] = '1' if item[1] == True else ''
                 elif item[0] == 'production':
                     payload['p'] = item[1]
+                elif item[0] == 'category':
+                    payload['c'] = item[1]
                 elif item[0] != 'min_duration' and item[0] != 'max_duration' and item[0] != 'page' and item[
-                    0] != 'quantity' and \
-                        item[
-                            0] != 'sort_by' and item[0] != 'isHd':
+                    0] != 'quantity' and item[0] != 'sort_by' and item[0] != 'isHd' and item[0] != 'production' and \
+                        item[0] != 'category':
                     payload[item[0]] = item[1]
-            if self.keywords:
-                search_url += SEARCH_URL
+            # if self.keywords:
+            #     search_url += SEARCH_URL
             r = requests.get(search_url, params=self._craftVideosURL(page_num, sort_by, payload), headers=HEADERS,
                              proxies=self.ProxyDictionary)
         else:
